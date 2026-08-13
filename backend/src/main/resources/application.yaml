@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: ai-code-reviewer
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pr_reviewer
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${GITHUB_CLIENT_ID} 
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: read:user,user:email,repo
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    model: gemini-3.6-flash
+    url: https://generativelanguage.googleapis.com/v1beta/models/${gemini.api.model}:generateContent
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_KEY}
+    algorithm: PBEWITHHMACSHA512ANDAES_256
+    iv-generator-classname: org.jasypt.iv.RandomIvGenerator
+
+app:
+  frontend-url: http://localhost:5173
+
+review:
+  max-diff-characters: 200000
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.client.RestClient: DEBUG
+    org.springframework.http.client: DEBUG
+
+server:
+  port: 8080

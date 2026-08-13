@@ -1,0 +1,15 @@
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# Java/Maven
+backend/target/
+backend/.mvn/
+backend/*.iml
+backend/.idea/
+
+# General
+.DS_Store
+*.log
+backend/src/main/resources/application-secrets.properties

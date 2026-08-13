@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #172033;
+  --color-muted: #64748b;
+  --color-surface: #f8fafc;
+  --color-primary: #4f46e5;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { @apply m-0 min-w-80 bg-slate-50 font-sans text-ink antialiased; }
+  button, input { font: inherit; }
+}
