@@ -3,6 +3,8 @@ import { AlertCircle, ArrowUpRight, CheckCircle2, Code2, Github, LoaderCircle, R
 import { getCurrentUser, getReview, retryReview, submitReview } from './api'
 import type { CurrentUser, Review, ReviewIssue, ReviewStatus } from './types'
 
+const API_URL = (import.meta as any).env?.VITE_API_URL
+
 const statusClass: Record<ReviewStatus, string> = {
   PENDING: 'bg-amber-50 text-amber-700 ring-amber-200',
   IN_PROGRESS: 'bg-blue-50 text-blue-700 ring-blue-200',
@@ -85,7 +87,7 @@ export default function App() {
           <span className="grid size-9 place-items-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-200"><Code2 className="size-5" /></span>
           Review.ai
         </a>
-        {isLoadingUser ? <span className="size-8 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-600" /> : currentUser ? <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200"><span className="grid size-6 place-items-center overflow-hidden rounded-full bg-indigo-100 text-xs text-indigo-700">{currentUser.avatarUrl ? <img src={currentUser.avatarUrl} alt="" className="size-full object-cover" /> : currentUser.name.slice(0, 1).toUpperCase()}</span>{currentUser.name}</div> : <a className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-900" href="http://localhost:8080/oauth2/authorization/github"><Github className="size-4" /> Sign in with GitHub</a>}
+        {isLoadingUser ? <span className="size-8 animate-spin rounded-full border-2 border-slate-200 border-t-indigo-600" /> : currentUser ? <div className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-slate-200"><span className="grid size-6 place-items-center overflow-hidden rounded-full bg-indigo-100 text-xs text-indigo-700">{currentUser.avatarUrl ? <img src={currentUser.avatarUrl} alt="" className="size-full object-cover" /> : currentUser.name.slice(0, 1).toUpperCase()}</span>{currentUser.name}</div> : <a className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-900" href={`${API_URL}/oauth2/authorization/github`}><Github className="size-4" /> Sign in with GitHub</a>}
       </header>
 
       <section className="mx-auto max-w-3xl pb-12 pt-18 text-center sm:pb-16 sm:pt-24">
@@ -95,7 +97,7 @@ export default function App() {
       </section>
 
       <section className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-xl shadow-slate-200/50 sm:p-6">
-        {isLoadingUser ? <div className="flex items-center justify-center gap-3 py-6 text-sm text-slate-500"><LoaderCircle className="size-5 animate-spin" /> Checking your GitHub session...</div> : !currentUser ? <div className="flex flex-col items-start gap-4 rounded-xl bg-slate-50 p-5 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="font-semibold text-slate-900">Sign in to start a review</h2><p className="mt-1 text-sm leading-6 text-slate-600">Your GitHub account is used to securely read pull requests you can access.</p></div><a href="http://localhost:8080/oauth2/authorization/github" className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700"><Github className="size-4" /> Sign in with GitHub</a></div> : <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
+        {isLoadingUser ? <div className="flex items-center justify-center gap-3 py-6 text-sm text-slate-500"><LoaderCircle className="size-5 animate-spin" /> Checking your GitHub session...</div> : !currentUser ? <div className="flex flex-col items-start gap-4 rounded-xl bg-slate-50 p-5 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="font-semibold text-slate-900">Sign in to start a review</h2><p className="mt-1 text-sm leading-6 text-slate-600">Your GitHub account is used to securely read pull requests you can access.</p></div><a href={`${API_URL}/oauth2/authorization/github`} className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700"><Github className="size-4" /> Sign in with GitHub</a></div> : <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
           <label className="sr-only" htmlFor="pr-url">GitHub pull request URL</label>
           <input id="pr-url" value={prUrl} onChange={(event) => setPrUrl(event.target.value)} required type="url" placeholder="https://github.com/owner/repository/pull/42" className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-4 focus:ring-indigo-100" />
           <button disabled={isSubmitting} className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60">
