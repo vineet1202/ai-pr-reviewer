@@ -1,6 +1,8 @@
 import type { CurrentUser, Review } from './types'
 
-const reviewUrl = (id: number) => `/api/reviews/${id}`
+const API_URL = import.meta.env.VITE_API_URL
+
+const reviewUrl = (id: number) => `${API_URL}/api/reviews/${id}`
 
 async function readJson<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -11,7 +13,7 @@ async function readJson<T>(response: Response): Promise<T> {
 }
 
 export async function submitReview(prUrl: string): Promise<Review> {
-  const response = await fetch('/api/reviews', {
+  const response = await fetch(`${API_URL}/api/reviews`, {
     method: 'POST',
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +31,7 @@ export async function retryReview(id: number): Promise<Review> {
 }
 
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  const response = await fetch(' http://localhost:8080/api/me', { credentials: 'include' })
+  const response = await fetch(`${API_URL}/api/me`, { credentials: 'include' })
   if (response.status === 401 || response.status === 403) return null
   return readJson<CurrentUser>(response)
 }
