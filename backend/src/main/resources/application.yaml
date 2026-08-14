@@ -2,9 +2,9 @@ spring:
   application:
     name: ai-code-reviewer
   datasource:
-    url: jdbc:postgresql://localhost:5432/pr_reviewer
-    username: postgres
-    password: postgres
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
@@ -35,7 +35,7 @@ jasypt:
     iv-generator-classname: org.jasypt.iv.RandomIvGenerator
 
 app:
-  frontend-url: http://localhost:5173
+  frontend-url: ${FRONTEND_URL}
 
 review:
   max-diff-characters: 200000
